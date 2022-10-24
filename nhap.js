@@ -1,4 +1,3 @@
-
 //gọi id của thẻ canvas bên HTML
 const cvs = document.getElementById("myCanvas");
 //định dạng hình vẽ 2d
@@ -17,6 +16,7 @@ const DEGREE = Math.PI / 180;
 const sprite = new Image();
 sprite.src = "img/sprite.png";
 
+//audio
 // load âm thanh
 //gọi hằng âm thanh
 const SCORE_S = new Audio();
@@ -47,10 +47,7 @@ const state = {
 //tạo nút bấm start
 const startBtn = {
     //tọa độ nút bấm start
-    x: 200,
-    y: 263,
-    w: 83,
-    h: 29
+    x: 200, y: 263, w: 83, h: 29
 }
 
 //control the game
@@ -83,8 +80,7 @@ cvs.addEventListener("click", function (evt) {
             let clickY = evt.clientY - rect.top;
             //vị trí nhấp chuột bây giờ sẽ thêm câu lệnh if, người chơi phải click đúng nút start
             //khi bấm vào nút start sẽ đặt lại ống, chim và điểm số và quay trở lại trạng thái getReady của game
-            if (clickX >= startBtn.x && clickX <= startBtn.x + startBtn.w &&
-                clickY >= startBtn.y && clickY < startBtn.y + startBtn.h) {
+            if (clickX >= startBtn.x && clickX <= startBtn.x + startBtn.w && clickY >= startBtn.y && clickY < startBtn.y + startBtn.h) {
                 pipes.reset()
                 bird.speedReset();
                 score.reset();
@@ -103,13 +99,7 @@ cvs.addEventListener("click", function (evt) {
 //đối tượng
 const bg = {
     //thuộc tính
-    sX: 0,
-    sY: 0,
-    w: 275,
-    h: 226,
-    x: 0,
-    y: cvs.height - 226,
-//hàm cắt ảnh bg sprite
+    sX: 0, sY: 0, w: 275, h: 226, x: 0, y: cvs.height - 226, //hàm cắt ảnh bg sprite
     draw: function () {
         ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h) //sử dụng phương pháp vẽ hình ảnh
         ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x + this.w, this.y, this.w, this.h) // cộng thêm chiều rộng vào trục x để cho hình nền đẩy đủ
@@ -119,21 +109,13 @@ const bg = {
 
 //foreground
 const fg = {
-    sX: 276,
-    sY: 0,
-    w: 224,
-    h: 112,
-    x: 0,
-    y: cvs.height - 112,
-    //thuộc tính dx để chỉnh tốc độ nền
+    sX: 276, sY: 0, w: 224, h: 112, x: 0, y: cvs.height - 112, //thuộc tính dx để chỉnh tốc độ nền
     //detalX
-    dx: 1,
-    draw: function () {
+    dx: 2, draw: function () {
         ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h) //sử dụng phương pháp vẽ hình ảnh
         ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x + this.w, this.y, this.w, this.h) // cộng thêm chiều rộng vào trục x để cho hình nền đẩy đủ
         ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x + this.w * 2, this.y, this.w, this.h) // cộng thêm chiều rộng vào trục x để cho hình nền đẩy đủ
-    },
-    update: function () {
+    }, update: function () {
         if (state.current == state.game) {
             //di chuyển nền dưới cần trừ đi tọa độ x
             //trừ đi x sẽ lùi lại sang trái
@@ -152,30 +134,21 @@ const fg = {
 const bird = {
 
     //tạo mảmg animation để tạo hoạt cảnh //4 hoạt cảnh
-    animation: [
-        {sX: 276, sY: 112}, //hoạt cánh cánh vẫy cánh lên
+    animation: [{sX: 276, sY: 112}, //hoạt cánh cánh vẫy cánh lên
         {sX: 276, sY: 139}, //hoạt cánh cánh ở giữa
         {sX: 276, sY: 164}, //hoạt cảnh cánh vẫy xuống
         {sX: 276, sY: 139}, //hoạt cảnh cánh ở giữa
-    ],
-    x: 50,
-    y: 150,
-    w: 34,
-    h: 26,
+    ], x: 50, y: 150, w: 34, h: 26,
 
     //tạo bán kính cho chim để phát hiện va chạm
-    radius: 12,
-    //tạo khung hình cho chim vẫy cánh
+    radius: 12, //tạo khung hình cho chim vẫy cánh
     //khi hình ảnh chim xuất hiện khung hình được đặt thành 0
     frame: 0,
 
     //trọng lực
-    gravity: 0.1,
-    //nhảy
-    jump: 3.5,
-    //tốc độ
-    speed: 0,
-    //tọa độ la bàn
+    gravity: 0.1, //nhảy
+    jump: 3.5, //tốc độ
+    speed: 0, //tọa độ la bàn
     rotation: 0,
 
     //tạo chức năng cập nhật cho nó
@@ -194,15 +167,13 @@ const bird = {
         ctx.drawImage(sprite, bird.sX, bird.sY, this.w, this.h, -this.w / 2, -this.h / 2, this.w, this.h); // sử dụng phương pháp vẽ hình ảnh và thay đổi tọa độ để tạo hoạt ảnh cho chim vẫy cánh
         //tạo hàm khôi phục trạng thái của la bàn;
         ctx.restore();
-    },
-    flap: function () {
+    }, flap: function () {
         //thêm mã cho phương pháp vỗ
         // tọa độ y giảm thì chim sẽ bay lên
         this.speed = -this.jump;
 
 
-    },
-    update: function () {
+    }, update: function () {
         //thêm một phương thức cập nhật  để cho nó hoạt ảnh
         //truyền giá trị giai đoạn
         //nếu ở chim ở giai đoạn màn hình getReady thì sẽ bay chậm lại
@@ -260,8 +231,7 @@ const bird = {
                 this.rotation = -25 * DEGREE;
             }
         }
-    },
-    speedReset: function () {
+    }, speedReset: function () {
         this.speed = 0;
     }
 }
@@ -271,8 +241,7 @@ const getReady = {
     sX: 0,
     sY: 228,
     w: 173,
-    h: 152,
-    //chiều rộng chia 2 sẽ ra giữa màn hình - một nửa của trục x để hình nền getReady ra giữa
+    h: 152, //chiều rộng chia 2 sẽ ra giữa màn hình - một nửa của trục x để hình nền getReady ra giữa
     x: cvs.width / 2 - 173 / 2,
     y: 80,
     draw: function () {
@@ -288,8 +257,7 @@ const gameOver = {
     sY: 228,
     w: 225,
     h: 202,
-    x: cvs.width / 2 - 225 / 2,
-    //chiều rộng chia 2 sẽ ra giữa màn hình - một nửa của trục x để hình nền gameOver ra giữa
+    x: cvs.width / 2 - 225 / 2, //chiều rộng chia 2 sẽ ra giữa màn hình - một nửa của trục x để hình nền gameOver ra giữa
     y: 90,
     draw: function () {
         //bản cập nhật state trạng thái cho đối tượng
@@ -297,31 +265,34 @@ const gameOver = {
             ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h)
         }
     }
+
 }
+
+// const medal = {
+//     sX: 312,
+//     sY: 157,
+//     w: 40,
+//     h: 32
+//     x: cvs.width / 2 - 225 / 2,
+//     y:90,
+//     draw: function (){
+//     }
+// }
 
 //vẽ đường ống pipes
 const pipes = {
     //tạo một mảng đối tượng
-    position: [],
-    //cắt ảnh ống trên có tọa độ
+    position: [], //cắt ảnh ống trên có tọa độ
     top: {
-        sX: 553,
-        sY: 0
-    },
-    //cắt ảnh ống dưới có tọa tộ
+        sX: 553, sY: 0
+    }, //cắt ảnh ống dưới có tọa tộ
     bottom: {
-        sX: 502,
-        sY: 0
-    },
-    //chiều rộng của ống
-    w: 53,
-    //chiều dài của ống
-    h: 400,
-    //khoảng cách để chim bay qua
-    gap: 110,
-    //
-    maxYPos: -150,
-    dx: 1,
+        sX: 502, sY: 0
+    }, //chiều rộng của ống
+    w: 53, //chiều dài của ống
+    h: 400, //khoảng cách để chim bay qua
+    gap: 110, //trừ đi chiều cao của ống để phù hợp cho trò chơi
+    maxYPos: -150, dx: 2,
 
 
     draw: function () {
@@ -347,9 +318,10 @@ const pipes = {
         //kiểm tra xem hiệm tại có phải trạng thái trò chơi hay không
         if (state.current !== state.game) return;
         //cứ mỗi 100 khung hình, sẽ thêm một vị trí mới trong mảng //cột
-        if (frames % 300 == 0) {
+        if (frames % 120 == 0) {
             this.position.push({
-                x: cvs.width,
+                x: cvs.width, //nằm trong canvas
+                //
                 y: this.maxYPos * (Math.random() + 1)
             });
         }
@@ -370,8 +342,7 @@ const pipes = {
             //4 bán kính tương tương với 4 góc của con chim
             //bán kính con chim lớn hơn trục ngang thì là va chạm //+ độ rộng của cột là chỉ va chạm của đuôi trong phạm vi của cột
             //bán kính con chim lớn hơn trục dọc thì là va chạm //+ độ rộng của cột là chỉ va chạm của đuôi trong phạm vi của cột
-            if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w &&
-                bird.y + bird.radius > bottomPipeYPos && bird.y - bird.radius < bottomPipeYPos + this.h) {
+            if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w && bird.y + bird.radius > bottomPipeYPos && bird.y - bird.radius < bottomPipeYPos + this.h) {
                 state.current = state.over;
                 HIT.play();
             }
@@ -381,8 +352,7 @@ const pipes = {
             //4 bán kính tương tương với 4 góc của con chim
             //bán kính con chim lớn hơn trục ngang thì là va chạm //+ độ rộng của cột là chỉ va chạm của đuôi trong phạm vi của cột
             //bán kính con chim lớn hơn trục dọc thì là va chạm //+ độ rộng của cột là chỉ va chạm của đuôi trong phạm vi của cột
-            if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w &&
-                bird.y + bird.radius > p.y && bird.y - bird.radius < p.y + this.h) {
+            if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w && bird.y + bird.radius > p.y && bird.y - bird.radius < p.y + this.h) {
                 state.current = state.over;
                 HIT.play();
             }
@@ -404,8 +374,7 @@ const pipes = {
                 localStorage.setItem("best", score.best);
             }
         }
-    },
-    //đặt lại đường ống
+    }, //đặt lại đường ống
     reset: function () {
         this.position = [];
     }
@@ -417,8 +386,7 @@ const score = {
     //tạo điểm bằng số nguyên tạo đối tượng để lưu trữ dữ liệu
     //tạo key là best
     best: parseInt(localStorage.getItem("best")) || 0,  //sẽ không lưu giá trị khi điểm bằng 0
-    value: 0,
-    draw: function () {
+    value: 0, draw: function () {
         //vẽ điểm bằng màu trắng
         ctx.fillStyle = "#FFF";
         //viền chữ màu đen
@@ -443,8 +411,7 @@ const score = {
             ctx.strokeText(this.best, 307, 228);
 
         }
-    },
-    reset: function () {
+    }, reset: function () {
         this.value = 0
     }
 
@@ -452,7 +419,7 @@ const score = {
 
 //draw //cần
 function draw() {
-    ctx.fillStyle = "#70c5ce"
+    ctx.fillStyle = "#73dffd"
     ctx.fillRect(0, 0, cvs.width, cvs.height);
     //vẽ
     bg.draw();
