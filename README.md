@@ -1,5 +1,4 @@
-Tác giả chơi: 
-
+Game được thiết kế dành cho màn hình hỗ trợ hz 120hz - trở lên, màn hình hz thấp hơn thì chuyển động sẽ bị chậm.
 Link chơi online: http://gamecualuan.epizy.com/
 Link chơi online 2: https://flappybirdbyluan.netlify.app/
 
